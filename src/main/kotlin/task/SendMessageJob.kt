@@ -1,13 +1,23 @@
 package org.example.task
 
+import kotlinx.coroutines.delay
+import org.example.dispatcher.TDispatchers
 import task.IJob
 
 class SendMessageJob: IJob {
     override fun getJobName(): String {
-        return ""
+        return "发送消息"
     }
 
-    override suspend fun execute() {
-        TODO("Not yet implemented")
+    override fun getDispatcher(): TDispatchers {
+        return TDispatchers.Default
+//        return TDispatchers.Main
+    }
+
+
+    override suspend fun onRun() {
+        println("开始执行任务：${getJobName()}")
+        delay(1_000)
+        println("任务执行完毕：${getJobName()}")
     }
 }

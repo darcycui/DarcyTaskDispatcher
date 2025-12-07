@@ -1,15 +1,21 @@
 package task
 
 import kotlinx.coroutines.delay
+import org.example.dispatcher.TDispatchers
 
 class UploadJob: IJob {
     override fun getJobName(): String {
-        return "上传任务"
+        return "上传"
     }
 
-    override suspend fun execute() {
-        println("上传任务开始执行+++")
-        delay(1_000)
-        println("上传任务执行完毕---")
+    override fun getDispatcher(): TDispatchers {
+        return TDispatchers.Default
+//        return TDispatchers.Main
+    }
+
+    override suspend fun onRun() {
+        println("开始执行任务：${getJobName()}")
+        delay(10_000)
+        println("任务执行完毕：${getJobName()}")
     }
 }
