@@ -9,8 +9,9 @@ class UploadJob: IJob {
     }
 
     override fun getDispatcher(): TDispatchers {
-        return TDispatchers.Default
+//        return TDispatchers.Serial
 //        return TDispatchers.Main
+        return TDispatchers.Parallel
     }
 
     override suspend fun onRun() {

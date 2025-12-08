@@ -1,9 +1,10 @@
 package org.example.manager
 
 import org.example.dispatcher.TDispatchers
-import org.example.executor.DefaultExecutor
+import org.example.executor.SerialExecutor
 import org.example.executor.IExecutor
 import org.example.executor.MainExecutor
+import org.example.executor.ParallelExecutor
 import task.IJob
 
 class TaskManager {
@@ -23,19 +24,18 @@ class TaskManager {
         when (job.getDispatcher()) {
             TDispatchers.Main -> {
                 val executor: IExecutor = MainExecutor.getInstance()
-                executor.execute(job)
+                executor.execute(listOf(job))
             }
 
-            TDispatchers.IO -> {
+            TDispatchers.Serial -> {
+                val executor: IExecutor = SerialExecutor.getInstance()
+                executor.execute(listOf(job))
             }
 
-            TDispatchers.Cpu -> {
 
-            }
-
-            TDispatchers.Default -> {
-                val executor: IExecutor = DefaultExecutor.getInstance()
-                executor.execute(job)
+            TDispatchers.Parallel -> {
+                val executor: IExecutor = ParallelExecutor.getInstance()
+                executor.execute(listOf(job))
             }
         }
     }

@@ -4,13 +4,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import task.IJob
 
-class DefaultExecutor private constructor(): IExecutor {
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+class SerialExecutor private constructor(): IExecutor {
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val jobChannel = Channel<IJob>(Channel.UNLIMITED)
     companion object {
-        private var instance: DefaultExecutor? = null
-        fun getInstance(): DefaultExecutor {
-            return instance ?: DefaultExecutor().also {
+        private var instance: SerialExecutor? = null
+        fun getInstance(): SerialExecutor {
+            return instance ?: SerialExecutor().also {
                 instance = it
             }
         }
@@ -20,7 +20,7 @@ class DefaultExecutor private constructor(): IExecutor {
         startConsumer()
     }
     private fun startConsumer() {
-        scope.launch {
+        scope.launch() {
             // 消费者：从队列中取出任务并执行
             for (job in jobChannel) {
                 println("${job.getJobName()} 在线程: ${Thread.currentThread().name} 中执行...")
@@ -29,10 +29,12 @@ class DefaultExecutor private constructor(): IExecutor {
         }
     }
 
-    override fun execute(job: IJob) {
+    override fun execute(jobs: List<IJob>) {
         scope.launch() {
             // 生产者：将任务放入队列
-            jobChannel.send(job)
+            for (job in jobs) {
+                jobChannel.send(job)
+            }
         }
     }
 }
