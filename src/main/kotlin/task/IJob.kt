@@ -5,5 +5,5 @@ import org.example.dispatcher.TDispatchers
 interface IJob {
     fun getJobName(): String
     fun getDispatcher(): TDispatchers
-    suspend fun onRun()
+    suspend fun onRun(): Unit
 }

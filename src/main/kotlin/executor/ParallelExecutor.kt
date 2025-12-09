@@ -2,6 +2,7 @@ package org.example.executor
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import org.example.entity.JobResult
 import task.IJob
 
 class ParallelExecutor : IExecutor {
@@ -36,6 +37,7 @@ class ParallelExecutor : IExecutor {
 
     override fun execute(jobs: List<IJob>) {
         scope.launch() {
+            // 生产者：将任务放入队列
             for (job in jobs) {
                 jobChannel.send(job)
             }

@@ -2,6 +2,7 @@ package org.example.executor
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import org.example.entity.JobResult
 import task.IJob
 
 class SerialExecutor private constructor(): IExecutor {

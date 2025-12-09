@@ -2,6 +2,7 @@ package org.example.executor
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import org.example.entity.JobResult
 import task.IJob
 
 class MainExecutor private constructor() : IExecutor {
@@ -25,14 +26,12 @@ class MainExecutor private constructor() : IExecutor {
     }
 
     private fun startConsumer() {
-        scope.launch {
+        scope.launch(mainDispatcher) {
             // 消费者：从队列中取出任务并执行
             while (isActive) {
                 val job = jobChannel.receive()
-                scope.launch(mainDispatcher) {
-                    println("当前线程: ${Thread.currentThread().name}")
-                    job.onRun()
-                }
+                println("当前线程: ${Thread.currentThread().name}")
+                job.onRun()
             }
         }
     }
