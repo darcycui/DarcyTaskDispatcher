@@ -2,12 +2,11 @@ package org.example.executor
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import org.example.entity.JobResult
 import task.IJob
 
 class MainExecutor private constructor() : IExecutor {
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-    private val jobChannel = Channel<IJob>(Channel.UNLIMITED)
+    private val taskChannel = Channel<IJob>(Channel.UNLIMITED)
 
     // 模拟主线程
     private val mainDispatcher = newSingleThreadContext("main")
@@ -29,9 +28,9 @@ class MainExecutor private constructor() : IExecutor {
         scope.launch(mainDispatcher) {
             // 消费者：从队列中取出任务并执行
             while (isActive) {
-                val job = jobChannel.receive()
+                val task = taskChannel.receive()
                 println("当前线程: ${Thread.currentThread().name}")
-                job.onRun()
+                task.onRun()
             }
         }
     }
@@ -40,7 +39,7 @@ class MainExecutor private constructor() : IExecutor {
         scope.launch(mainDispatcher) {
             // 生产者：将任务放入队列
             for (job in jobs) {
-                jobChannel.send(job)
+                taskChannel.send(job)
             }
         }
     }

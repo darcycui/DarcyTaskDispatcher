@@ -1,9 +1,6 @@
 package org.example.manager
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import org.example.dispatcher.TDispatchers
-import org.example.entity.JobResult
 import org.example.executor.SerialExecutor
 import org.example.executor.IExecutor
 import org.example.executor.MainExecutor
