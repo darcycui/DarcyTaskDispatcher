@@ -1,7 +1,6 @@
-package org.example.event
+package event
 
-import org.example.entity.TaskResult
-import org.example.entity.TaskStatus
+import entity.TaskResult
 
 sealed class TaskEvent {
     data class FileUploaded<T>(val filePath: String, val taskResult: TaskResult<T>) : TaskEvent() {

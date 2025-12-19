@@ -1,4 +1,4 @@
-package org.example.entity
+package entity
 
 data class TaskError(
     val taskName: String,

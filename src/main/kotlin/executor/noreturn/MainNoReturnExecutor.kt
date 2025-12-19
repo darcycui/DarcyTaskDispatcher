@@ -1,20 +1,21 @@
-package org.example.executor
+package executor.noreturn
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import task.IJob
+import task.noreturn.INoReturnValueTask
 
-class MainExecutor private constructor() : IExecutor {
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-    private val taskChannel = Channel<IJob>(Channel.UNLIMITED)
-
+class MainNoReturnExecutor private constructor() : INoReturnExecutor {
     // 模拟主线程
     private val mainDispatcher = newSingleThreadContext("main")
+    private val scope: CoroutineScope = CoroutineScope(mainDispatcher + SupervisorJob())
+    private val taskChannel = Channel<INoReturnValueTask>(Channel.UNLIMITED)
+
 
     companion object {
-        private var instance: MainExecutor? = null
-        fun getInstance(): MainExecutor {
-            return instance ?: MainExecutor().also {
+        private var instance: MainNoReturnExecutor? = null
+        fun getInstance(): MainNoReturnExecutor {
+            return instance
+                    ?: MainNoReturnExecutor().also {
                 instance = it
             }
         }
@@ -25,7 +26,7 @@ class MainExecutor private constructor() : IExecutor {
     }
 
     private fun startConsumer() {
-        scope.launch(mainDispatcher) {
+        scope.launch(scope.coroutineContext) {
             // 消费者：从队列中取出任务并执行
             while (isActive) {
                 val task = taskChannel.receive()
@@ -35,11 +36,11 @@ class MainExecutor private constructor() : IExecutor {
         }
     }
 
-    override fun execute(jobs: List<IJob>) {
+    override fun execute(tasks: List<INoReturnValueTask>) {
         scope.launch(mainDispatcher) {
             // 生产者：将任务放入队列
-            for (job in jobs) {
-                taskChannel.send(job)
+            for (task in tasks) {
+                taskChannel.send(task)
             }
         }
     }

@@ -1,10 +1,8 @@
-package org.example.event
+package event
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
-import org.example.dispatcher.TDispatchers
 
 object EventBus {
     // 内部使用
@@ -14,9 +12,6 @@ object EventBus {
         // 配置缓冲区大小
         extraBufferCapacity = 64
     )
-
-    // 外部使用
-    val eventFlow = _eventFlow.asSharedFlow()
 
     // 发送事件到所有订阅者
     suspend fun notify(event: TaskEvent) {
@@ -34,7 +29,7 @@ object EventBus {
 
     // 订阅事件
     suspend fun collectEvent(dispatcher: CoroutineDispatcher, action: (TaskEvent) -> Unit) {
-        eventFlow.collect {
+        _eventFlow.collect {
             // 处理事件
             withContext(dispatcher) {
                 action(it)

@@ -1,19 +1,18 @@
-package org.example.executor
+package executor.noreturn
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import org.example.event.EventBus
-import task.IJob
+import task.noreturn.INoReturnValueTask
 
-class ParallelExecutor : IExecutor {
+class ParallelNoReturnExecutor : INoReturnExecutor {
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    private val taskChannel = Channel<IJob>(Channel.UNLIMITED)
+    private val taskChannel = Channel<INoReturnValueTask>(Channel.UNLIMITED)
 
     companion object {
-        private var instance: ParallelExecutor? = null
-        fun getInstance(): ParallelExecutor {
+        private var instance: ParallelNoReturnExecutor? = null
+        fun getInstance(): ParallelNoReturnExecutor {
             if (instance == null) {
-                instance = ParallelExecutor()
+                instance = ParallelNoReturnExecutor()
             }
             return instance!!
         }
@@ -28,18 +27,18 @@ class ParallelExecutor : IExecutor {
             scope.launch {
                 while (isActive) {
                     val task = taskChannel.receive()
-                    println("${task.getJobName()} 在线程: ${Thread.currentThread().name} 中执行...")
+                    println("${task.getTaskName()} 在线程: ${Thread.currentThread().name} 中执行...")
                     task.onRun()
                 }
             }
         }
     }
 
-    override fun execute(jobs: List<IJob>) {
+    override fun execute(tasks: List<INoReturnValueTask>) {
         scope.launch() {
             // 生产者：将任务放入队列
-            for (job in jobs) {
-                taskChannel.send(job)
+            for (task in tasks) {
+                taskChannel.send(task)
             }
         }
     }

@@ -1,7 +1,7 @@
-package org.example.dispatcher
+package dispatcher
 
-import task.IJob
+import task.noreturn.INoReturnValueTask
 
 interface IDispatcher {
-    suspend fun dispatch(job: IJob)
+    suspend fun dispatch(job: INoReturnValueTask)
 }
