@@ -5,7 +5,7 @@ import dispatcher.TDispatchers
 import entity.TaskResult
 import event.EventBus
 import event.TaskEvent
-import task.noreturn.INoReturnValueTask
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class SendMessageNoReturnValueTask : INoReturnValueTask {
     override fun getTaskName(): String {
@@ -19,13 +19,14 @@ class SendMessageNoReturnValueTask : INoReturnValueTask {
     }
 
 
+    @ExperimentalCoroutinesApi
     override suspend fun onRun() {
         println("${getTaskName()}开始+++")
         delay(1_000)
         println("${getTaskName()}结束---")
         println("事件发送==>${getTaskName()}")
         EventBus.notify(
-            TaskEvent.MessageSent(
+            TaskEvent.MessageSend(
                 "message1",
                 TaskResult.success(getTaskName(), "message result1"),
             )

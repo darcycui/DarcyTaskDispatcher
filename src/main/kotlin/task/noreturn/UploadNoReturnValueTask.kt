@@ -5,7 +5,6 @@ import dispatcher.TDispatchers
 import entity.TaskResult
 import event.EventBus
 import event.TaskEvent
-import task.noreturn.INoReturnValueTask
 
 class UploadNoReturnValueTask: INoReturnValueTask {
     override fun getTaskName(): String {
@@ -24,7 +23,7 @@ class UploadNoReturnValueTask: INoReturnValueTask {
         println("${getTaskName()}结束---")
         println("事件发送==>${getTaskName()}")
         EventBus.notify(
-            TaskEvent.FileUploaded(
+            TaskEvent.FileUpload(
             filePath = "filePath1",
             taskResult = TaskResult.success(getTaskName(), "file result1")))
     }
