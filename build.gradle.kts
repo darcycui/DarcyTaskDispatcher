@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm") version "1.4.0"
 }
 
 group = "org.example"
@@ -16,14 +16,26 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     // 添加协程库
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     // 如果需要在测试中使用协程，也可以添加测试专用的协程库
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
-kotlin {
-    jvmToolchain(17)
+//kotlin {
+//    jvmToolchain(8)
+//}
+
+configure<JavaPluginConvention> {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+tasks {
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
 }
