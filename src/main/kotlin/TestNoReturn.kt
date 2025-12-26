@@ -12,7 +12,12 @@ import task.noreturn.UploadNoReturnValueTask
 fun main(args: Array<String>) {
     val taskManager = TaskManager.getInstance()
 
-    taskManager.addTaskNoResultValue(listOf(UploadNoReturnValueTask(), SendMessageNoReturnValueTask()))
+    taskManager.addTaskNoResultValue(
+        listOf(
+            UploadNoReturnValueTask(),
+            SendMessageNoReturnValueTask()
+        )
+    )
     runBlocking {
 //        launch {
 //            EventBus.collectFileUploadedEvent(Dispatchers.Default) {
@@ -20,7 +25,7 @@ fun main(args: Array<String>) {
 //            }
 //        }
 //        launch {
-//            EventBus.collectFileUploadedEvent(Dispatchers.Default) {
+//            EventBus.collectMessageSentEvent(Dispatchers.Default) {
 //                println("事件接收<== $it")
 //            }
 //        }

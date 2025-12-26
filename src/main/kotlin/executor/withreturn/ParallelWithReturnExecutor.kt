@@ -11,11 +11,13 @@ class ParallelWithReturnExecutor private constructor() : IWithReturnExecutor<Str
             val deferredList: MutableList<Deferred<TaskResult<String>>> = mutableListOf()
             tasks.forEach { task ->
                 deferredList.add(
+                    // async 异步协程
                     async(scope.coroutineContext) {
                         println("${task.getTaskName()} 在线程: ${Thread.currentThread().name} 中执行...")
                         task.onRun()
                     })
             }
+            // 等待所有 async 任务完成
             deferredList.awaitAll()
         }
     }
