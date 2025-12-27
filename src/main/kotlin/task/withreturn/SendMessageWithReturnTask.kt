@@ -12,9 +12,9 @@ class SendMessageWithReturnTask : IWithReturnTask<String> {
     }
 
     override fun getDispatcher(): TDispatchers {
-        return TDispatchers.Main
+//        return TDispatchers.Main
 //        return TDispatchers.Serial
-//        return TDispatchers.Parallel
+        return TDispatchers.Parallel
     }
 
     override suspend fun onRun(): TaskResult<String> {
