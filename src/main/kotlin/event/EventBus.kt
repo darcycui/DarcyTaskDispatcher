@@ -14,7 +14,7 @@ object EventBus {
 //        // 新订阅者不接收旧事件（非粘性）
 //        replay = 0,
 //        // 配置缓冲区大小
-//        extraBufferCapacity = 64
+//        extraBufferCapacity = 64 
     )
     private val _messageSentEventFlow = MutableStateFlow<TaskEvent>(value = TaskEvent.EmptyEvent)
     private val map: Map<KClass<*>, MutableStateFlow<TaskEvent>> = mapOf(
